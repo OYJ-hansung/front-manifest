@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  labels:
+    app: front
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+      - name: frontend-app
+        image: dhdudwn95/front:22
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 50m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front
+spec:
+  type: NodePort
+  ports:
+    - nodePort: 33000
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: front
